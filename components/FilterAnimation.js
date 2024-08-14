@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-import { resolve } from "styled-jsx/css";
+import { useEffect, useRef } from "react";
+import styles from "./FilterAnimation.module.css";
 
 export function FilterAnimation() {
+  const blurRef = useRef(null);
   const getMousePos = () => {
     return new Promise((resolve) => {
       const handler = (event) => {
@@ -23,19 +24,19 @@ export function FilterAnimation() {
       const { leftPos, topPos } = await Promise.race([
         getMousePos(),
         new Promise((resolve) => {
-          setTimeout(resolve, 300, { leftPos: -1, topPos: -1 });
+          setTimeout(resolve, 560, { leftPos: -1, topPos: -1 });
         }),
       ]);
 
-      const filterBlendElement = document.getElementById("mm", "before");
+      // const filterBlendElement = document.getElementById("mm", "before");
       if (leftPos == -1 && topPos == -1) {
-        filterBlendElement.style.setProperty("--filter-opacity", 0);
+        blurRef.current.style.setProperty("--transparent-radius", `${0}vh`);
         intervalID = setInterval(intevalFunction, 40);
       } else {
-        filterBlendElement.style.setProperty("--filter-opacity", 1);
-        filterBlendElement.style.setProperty("--top-pos", `${topPos}%`);
-        filterBlendElement.style.setProperty("--left-pos", `${leftPos}%`);
-        intervalID = setInterval(intevalFunction, 40);
+        blurRef.current.style.setProperty("--transparent-radius", `${12}vh`);
+        blurRef.current.style.setProperty("--top-pos", `${topPos}%`);
+        blurRef.current.style.setProperty("--left-pos", `${leftPos}%`);
+        intervalID = setInterval(intevalFunction, 10);
       }
       console.log(`${topPos}`);
     };
@@ -51,5 +52,5 @@ export function FilterAnimation() {
     // });
   }, []);
   //   console.log("please");
-  return;
+  return <div ref={blurRef} className={styles.blur}></div>;
 }

@@ -1,91 +1,27 @@
 
-@property --grad-color1 {
-    syntax: '<color>';
-    initial-value: magenta;
-    inherits: false;
-  }
-
 @property --top-pos {
-    syntax: '<length>';
+    syntax: '<percentage>';
     inherits: false;
     initial-value: 60%;
 }
-@property --filter-opacity {
+@property --transparent-radius {
     syntax: '<length>';
     inherits: false;
-    initial-value: 1;
+    initial-value: 0vh;
 }
 @property --left-pos {
-    syntax: '<length>';
+    syntax: '<percentage>';
     inherits: false;
     initial-value: 60%;
 }
 
-@property --grad-color2 {
-    syntax: '<color>';
-    initial-value: #00ff00;
-    inherits: false;
-  }
-
-@property --my-color {
-    syntax: '<color>';
-    inherits: false;
-    initial-value: #ff0000;
-  }
-
-  .container1 {
-    /* position: relative; */
-    width: 100%;
-    height: 100vh;
-    background: url('../../assets/mjiran0124_A_solid_simple_and_artistic_picture_pepople_use_ethe_0ddcb052-8930-40aa-9165-8fa491b30b19.png') no-repeat center center;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Ensures the pseudo-element is confined within the container */
-
-}
-
-.container1::before {
-    content: '';
-    position: absolute;
-    top: var(--top-pos);
-    left: var(--left-pos);
-    transition: top 160ms ease,left 160ms ease,opacity 1500ms  linear ;
-    width:min(10vh,10vw); /* Diameter of the circle */
-    height: min(10vh,10vw);
-    transform: translate(-50%, -50%); /* Centers the circle */
-    background: inherit; /* Uses the same background as the container */
-    filter: brightness(2) blur(10px); /* Applies the filter */
-    border-radius: 50%; /* Makes the area circular */
-    z-index: 1; /* Ensures the circle is on top of the background but behind any content */
-    opacity: var(--filter-opacity);
-}
-
-.text1content1 {
-    position: relative;
-    color: white;
-    font-size: 2rem;
-    z-index: 2; /* Ensures the text is on top of the filtered area */
-}
-
-
-.box {
-    width: 100px;
-    height: 100px;
-    background-color: var(--my-color);
-    transition: --my-color 2s ease;
-  }
-
 .container {
+    position: relative;
     width: 100%;
     height: 100vh;
-    
-    background: linear-gradient(135deg, var(--grad-color1), var(--grad-color2));
-    transition: --grad-color1 2s ease, --grad-color2 2s ease;
+    z-index: 2; /* Ensure content inside container is above the blur */
 }
 
-.container:hover {
-    --grad-color1 :#00ff00;
-    --grad-color2:#ff00ff;
+.cart {
+  
 }
