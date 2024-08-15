@@ -3,42 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blur Background Except Circle</title>
+    <title>Ethereum Payment</title>
     <style>
+        /* Define main colors */
+        :root {
+            --primary-color: #2c3e50;  /* Dark blue-gray */
+            --secondary-color: #ecf0f1; /* Light gray */
+            --accent-color: #3498db;    /* Bright blue */
+            --toggle-active-color: #2ecc71; /* Green for active state */
+        }
+
         body, html {
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
             height: 100%;
-            overflow: hidden;
-            background: url('../../assets/mjiran0124_A_solid_simple_and_artistic_picture_pepople_use_ethe_0ddcb052-8930-40aa-9165-8fa491b30b19.png') no-repeat center center;
-            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .container::before {
-            content: '';
+        .cart-container {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            color: var(--secondary-color);
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--accent-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--accent-color);
+            border-radius: 5px;
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .form-group input[type="text"]::placeholder,
+        .form-group input[type="number"]::placeholder {
+            color: var(--primary-color);
+            opacity: 0.7;
+        }
+
+        .payment-button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-button:hover {
+            background-color: darken(var(--accent-color), 10%);
+        }
+
+        .cart-footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .cart-footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .cart-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Toggle switch styling */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .toggle-label {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
             position: absolute;
+            cursor: pointer;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            backdrop-filter: blur(10px); /* Apply blur to the background */
-            z-index: 1;
-            pointer-events: none;
-            mask-image: radial-gradient(circle at center, transparent 150px, black 160px); /* Mask out the circle */
-            -webkit-mask-image: radial-gradient(circle at 30% 10%, transparent 150px, black 160px);
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
         }
 
-        .container {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            z-index: 2; /* Ensure content inside container is above the blur */
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--toggle-active-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Your content goes here -->
+    <div class="cart-container">
+        <div class="cart-header">
+            <h2>Ethereum Payment</h2>
+        </div>
+        <form>
+            <div class="toggle-container">
+                <label class="toggle-label" for="walletToggle">Use WalletConnect</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="walletToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="walletAddress">Ethereum Wallet Address</label>
+                <input type="text" id="walletAddress" placeholder="Enter your wallet address">
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount (ETH)</label>
+                <input type="number" id="amount" placeholder="0.00">
+            </div>
+            <button type="submit" class="payment-button">Pay Now</button>
+        </form>
+        <div class="cart-footer">
+            <p>Need help? <a href="#">Contact support</a></p>
+        </div>
     </div>
+
+    <script>
+        const walletToggle = document.getElementById('walletToggle');
+        const walletAddressInput = document.getElementById('walletAddress');
+
+        walletToggle.addEventListener('change', function() {
+            if (this.checked) {
+                walletAddressInput.disabled = true;
+                walletAddressInput.value = ''; // Clear the input when WalletConnect is used
+            } else {
+                walletAddressInput.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>

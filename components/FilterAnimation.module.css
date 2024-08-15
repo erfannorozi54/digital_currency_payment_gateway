@@ -15,10 +15,10 @@
 } */
 
 .blur {
-    position: relative;
+    position: absolute;
     background: url('../assets/mjiran0124_A_solid_simple_and_artistic_picture_pepople_use_ethe_0ddcb052-8930-40aa-9165-8fa491b30b19.png') no-repeat center center;
     background-size: cover;
-    z-index: 1;
+    z-index: -1;
     width: 100%;
     height: 100vh;
     pointer-events: none;
