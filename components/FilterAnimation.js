@@ -38,19 +38,9 @@ export function FilterAnimation() {
         blurRef.current.style.setProperty("--left-pos", `${leftPos}%`);
         intervalID = setInterval(intevalFunction, 10);
       }
-      console.log(`${topPos}`);
     };
 
     intervalID = setInterval(intevalFunction, 40);
-    // document.addEventListener("mousemove", (e) => {
-    //   const x = (e.clientX * 100) / window.innerWidth;
-    //   const y = (e.clientY * 100) / window.innerHeight;
-    //   const filterBlendElement = document.getElementById("mm", "before");
-
-    //   filterBlendElement.style.setProperty("--top-pos", `${y}%`);
-    //   filterBlendElement.style.setProperty("--left-pos", `${x}%`);
-    // });
   }, []);
-  //   console.log("please");
   return <div ref={blurRef} className={styles.blur}></div>;
 }

@@ -1,0 +1,104 @@
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--secondary-color);
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--accent-color);
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+.form-group input[type="text"]::placeholder,
+.form-group input[type="number"]::placeholder {
+  color: var(--primary-color);
+  opacity: 0.7;
+}
+
+.payment-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.payment-button:hover {
+  background-color: darken(var(--accent-color), 10%);
+}
+
+
+/* Toggle switch styling */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.toggle-label {
+  color: var(--secondary-color);
+  font-weight: bold;
+  flex: 0 0 74%;
+}
+
+.toggle-switch {
+  position: relative;
+  flex-shrink: 0; 
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--toggle-active-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
