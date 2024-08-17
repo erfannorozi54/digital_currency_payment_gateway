@@ -1,6 +1,6 @@
 import styles from "./page.module.css";
 import "../globals.css";
-import { Button } from "@/components/Button";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { FilterAnimation } from "@/components/FilterAnimation";
 import { PriceHolder } from "@/components/priceHolder";
 import { GatewayCreationForm } from "@/components/GatewayCreationForm";
@@ -16,20 +16,25 @@ export default function Test() {
     });
   }
   return (
-    <div className={styles.container}>
-      <FilterAnimation />
-      <div className={styles["cart-container"]}>
-        <div className={styles["cart-header"]}>
-          <h2>درگاه برای پرداخت حضوری</h2>
+    <>
+      <div className={styles.container}>
+        <div dir="ltr">
+          <ConnectButton></ConnectButton>
         </div>
-        <PriceHolder />
-        <GatewayCreationForm />
-        <div className={styles["cart-footer"]}>
-          <p>
-            مشکلی پیش اومده? <a> به من بگو</a>
-          </p>
+        <FilterAnimation />
+        <div className={styles["cart-container"]}>
+          <div className={styles["cart-header"]}>
+            <h2>درگاه برای پرداخت حضوری</h2>
+          </div>
+          <PriceHolder />
+          <GatewayCreationForm />
+          <div className={styles["cart-footer"]}>
+            <p>
+              مشکلی پیش اومده? <a> به من بگو</a>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

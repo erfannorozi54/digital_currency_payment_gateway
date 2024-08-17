@@ -2,6 +2,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import "./globals.css";
 import { inter } from "@/fonts.js";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function Home() {
   return (
