@@ -1,4 +1,5 @@
 "use client";
+require("dotenv").config();
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import {
   arbitrum,
@@ -11,7 +12,7 @@ import {
 
 export const config = getDefaultConfig({
   appName: "payment gateway",
-  projectId: "3c78f6fb93e1a6413e0f426c97bdaa4d",
+  projectId: process.env.WALLET_CONNECT_PROJECTID,
   chains: [
     mainnet,
     polygon,

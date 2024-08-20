@@ -9,6 +9,7 @@ export function GatewayCreationForm() {
   function handleToggle(event) {
     setAutoWalletToggle((previous) => !previous);
   }
+
   console.log(isConnected);
   return (
     <>
@@ -29,6 +30,7 @@ export function GatewayCreationForm() {
             className={` ${autoWalletToggle ? styles["input-disabled"] : ""}`}
             id="walletAddress"
             name="walletAddress"
+            disabled={autoWalletToggle}
             placeholder={` ${
               !autoWalletToggle
                 ? "آدرس کیف  پول گیرنده را وارد کنید"

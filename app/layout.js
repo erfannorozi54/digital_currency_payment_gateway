@@ -1,6 +1,8 @@
 import "./globals.css";
 import { inter, vazirmatn } from "@/fonts.js";
 import "@rainbow-me/rainbowkit/styles.css";
+import Navbar from "@/components/navbar";
+import { FilterAnimation } from "@/components/FilterAnimation";
 
 export const metadata = {
   title: "Create Next App",
@@ -10,9 +12,14 @@ import { Providers } from "./provider";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function RootLayout({ children }) {
   return (
-    <html lang="fa" dir="rtl">
+    <html lang="fa">
       <body className={vazirmatn.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <FilterAnimation />
+
+          <Navbar></Navbar>
+          {children}
+        </Providers>
       </body>
     </html>
   );

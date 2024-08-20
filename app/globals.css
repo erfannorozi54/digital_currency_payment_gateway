@@ -91,20 +91,20 @@ body, html {
   max-width: 100vw;
   margin: 0;
   padding: 0;
-  height: 100%;
+  /* height: 100%; */
   /* overflow: hidden; */
 
 }
 
-body {
-  background: url('../assets/mjiran0124_A_solid_simple_and_artistic_picture_pepople_use_ethe_0ddcb052-8930-40aa-9165-8fa491b30b19.png') no-repeat center center;
-  backdrop-filter: blur(10px);
+ body {
+  /* background: url('../assets/mjiran0124_A_solid_simple_and_artistic_picture_pepople_use_ethe_0ddcb052-8930-40aa-9165-8fa491b30b19.png') no-repeat center center; */
+  /* backdrop-filter: blur(10px); */
   background-size: cover;
   z-index: 0;
 
   animation-name: bluring;
   animation-duration: 4s;
-}
+} 
 
 
 
