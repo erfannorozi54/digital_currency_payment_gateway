@@ -25,23 +25,6 @@
   opacity: 0.7;
 }
 
-.payment-button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--accent-color);
-  color: var(--secondary-color);
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.payment-button:hover {
-  background-color: darken(var(--accent-color), 10%);
-}
-
 
 /* Toggle switch styling */
 .toggle-container {

@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: var(--secondary-color); /* Light gray background */
+    padding: 20px;
+  }
+  
+  .instructions,
+  .qrCode {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--primary-color); /* Dark blue-gray background */
+    color: var(--secondary-color); /* Light text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .instructions h2,
+  .qrCode h2 {
+    color: var(--accent-color); /* Bright blue heading */
+  }
+  
+  .instructions p,
+  .qrCode p {
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  
+  .ethereumAddress {
+    display: block;
+    padding: 10px;
+    background-color: var(--accent-color); /* Bright blue */
+    color: var(--secondary-color); /* Light text */
+    font-family: monospace;
+    font-size: 18px;
+    border-radius: 5px;
+    word-wrap: break-word; /* Ensure long addresses wrap */
+  }
+  
+  .qrCode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }

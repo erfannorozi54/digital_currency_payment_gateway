@@ -27,3 +27,12 @@ export function IRR2IRT(IRR) {
 
   return output;
 }
+import { z } from "zod";
+
+export const formSchema = z.object({
+  walletAddress: z
+    .string()
+    .min(1, "آدرس کیف پول گیرنده را وارد کنید")
+    .regex(/^0x[a-zA-Z0-9]{40}$/, "آدرس کیف پول نامعتبر است"),
+  amount: z.number().min(1, "مقدار باید بیشتر از 0 باشد"),
+});

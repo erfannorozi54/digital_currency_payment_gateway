@@ -1,6 +1,9 @@
 "use client";
-require("dotenv").config();
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import {
+  getDefaultConfig,
+  RainbowKitProvider,
+  darkTheme,
+} from "@rainbow-me/rainbowkit";
 import {
   arbitrum,
   base,
@@ -9,10 +12,9 @@ import {
   polygon,
   sepolia,
 } from "wagmi/chains";
-
 export const config = getDefaultConfig({
-  appName: "payment gateway",
-  projectId: process.env.WALLET_CONNECT_PROJECTID,
+  appName: "payment_gateway",
+  projectId: "667c0496a3df56d1a72a79853efe83b7",
   chains: [
     mainnet,
     polygon,
@@ -27,7 +29,6 @@ export const config = getDefaultConfig({
 import * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +36,13 @@ export function Providers({ children }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
+        <RainbowKitProvider
+          theme={darkTheme({
+            overlayBlur: "small",
+          })}
+        >
+          {children}
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
