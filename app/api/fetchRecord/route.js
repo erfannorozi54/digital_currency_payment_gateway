@@ -15,14 +15,14 @@ import db from "@/utils/db";
 //   return res;
 // }
 
-export const config = {
-  api: {
-    bodyParser: {
-      type: "application/x-www-form-urlencoded",
-      extended: true,
-    },
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: {
+//       type: "application/x-www-form-urlencoded",
+//       extended: true,
+//     },
+//   },
+// };
 
 export async function POST(request) {
   const data = await request.formData();

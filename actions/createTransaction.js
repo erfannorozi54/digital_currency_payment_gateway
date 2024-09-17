@@ -2,7 +2,7 @@
 import { formSchema } from "@/utils/utils";
 import db from "@/utils/db";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { bigint, z } from "zod";
 import { Wallet } from "ethers";
 
 // Assume a conversion rate for ETH to Rial for demonstration (1 ETH = 1,500,000,000 Rials)
@@ -27,6 +27,19 @@ export async function someAction(prevState, formData) {
     .catch((error) => {
       console.error("Error fetching the price:", error);
     });
+  const transactionFee = await fetch(
+    "http://localhost:3000/api/fetchGasFee?network=mainnet",
+    {
+      cache: "no-store",
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      return BigInt(data["transactionFeeWei"]);
+    })
+    .catch((error) => {
+      console.error("Error fetching the price:", error);
+    });
   const { walletAddress: temporaryAddress, privateKey } =
     await generateWallet();
   try {
@@ -35,22 +48,20 @@ export async function someAction(prevState, formData) {
       walletAddress: formData.get("walletAddress"),
       amount: parseInt(formData.get("amount")), // Amount in Toman
     });
-
     // Calculate the equivalent amount in ETH
     const amountInToman = validatedData.amount; // Amount in Toman from the form
-    const amountInEth = parseFloat(
-      (
-        ((parseFloat(amountInToman) / ETH_TO_TOMAN_CONVERSION_RATE) * 102) /
-        100
-      ).toFixed(5)
-    ); // Convert Toman to ETH
+    const amountInWei =
+      transactionFee +
+      (BigInt(amountInToman) * BigInt(1e18)) /
+        BigInt(ETH_TO_TOMAN_CONVERSION_RATE);
+    const amountInEth = parseFloat((Number(amountInWei) / 1e18).toFixed(5)); // Convert Toman to ETH
     console.log(amountInEth);
     console.log(ETH_TO_TOMAN_CONVERSION_RATE);
 
     // Insert a new transaction record
     const stmt = db.prepare(`
-      INSERT INTO transactions (status, creation_time, expiration_date, receiver_address, temporary_address, private_key, amount_in_toman, amount_in_eth)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO transactions (status, creation_time, expiration_date, receiver_address, temporary_address, private_key, amount_in_toman, amount_in_eth, amount_in_wei, transfer_fee_in_wei)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     // Sample data for temporary fields
@@ -68,7 +79,9 @@ export async function someAction(prevState, formData) {
       temporaryAddress,
       privateKey,
       amountInToman, // Amount in Toman (from form)
-      amountInEth // Amount in ETH (calculated)
+      amountInEth, // Amount in ETH (calculated)
+      amountInWei.toString(),
+      transactionFee.toString()
     );
     console.log("Validated data and record inserted:", validatedData);
   } catch (error) {
