@@ -36,3 +36,34 @@ export const formSchema = z.object({
     .regex(/^0x[a-zA-Z0-9]{40}$/, "آدرس کیف پول نامعتبر است"),
   amount: z.number().min(1, "مقدار باید بیشتر از 0 باشد"),
 });
+
+export async function updateTransactionStatus(
+  transactionId,
+  status,
+  transactionHash,
+  network
+) {
+  try {
+    const response = await fetch("/api/updateTransaction", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        transactionId,
+        status,
+        transactionHash,
+        network,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to update transaction.");
+    }
+
+    console.log("Transaction status updated:", data.message);
+  } catch (err) {
+    console.error("Error updating transaction status:", err);
+  }
+}

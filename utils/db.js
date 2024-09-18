@@ -22,7 +22,8 @@ db.exec(`
     amount_in_toman REAL NOT NULL DEFAULT 0.0,  -- Amount in Toman
     amount_in_eth REAL NOT NULL DEFAULT 0.0,    -- Amount in ETH
     amount_in_wei TEXT NOT NULL DEFAULT '0',    -- Amount in Wei (as string)
-    transfer_fee_in_wei TEXT NOT NULL DEFAULT '0' -- Transfer fee in Wei (as string)
+    transfer_fee_in_wei TEXT NOT NULL DEFAULT '0', -- Transfer fee in Wei (as string)
+    transaction_hash TEXT DEFAULT NULL          -- Transaction hash, default NULL
   )
 `);
 

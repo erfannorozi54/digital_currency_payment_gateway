@@ -1,11 +1,36 @@
-.container {
+/* .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
-    background-color: var(--secondary-color); /* Light gray background */
+    height: 100vh; 
     padding: 20px;
-  }
+  } */
+
+@property --top-pos {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 60%;
+}
+@property --transparent-radius {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0vh;
+}
+@property --left-pos {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 60%;
+}
+
+  .container {
+    flex-wrap: wrap;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    white-space: between-items;
+    z-index: 2; /* Ensure content inside container is above the blur */
+}
   
   .instructions,
   .qrCode {

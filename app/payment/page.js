@@ -9,44 +9,50 @@ import {
 } from "wagmi";
 
 import { QRCodeSVG } from "qrcode.react";
-import { injected } from "wagmi/connectors";
-// import { mainnet, sepolia } from "wagmi/chains";
-import { walletConnect } from "wagmi/connectors";
-import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  sepolia,
-} from "wagmi/chains";
-
-const connector1 = walletConnect({
-  projectId: "667c0496a3df56d1a72a79853efe83b7",
-  qrModalOptions: {
-    themeMode: "dark",
-  },
-  showQrModal: false,
-});
 
 import { useRouter } from "next/navigation";
+import { updateTransactionStatus } from "@/utils/utils";
 export default function PaymentPage({ searchParams }) {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const { disconnect } = useDisconnect();
   const [firstLoad, setFirstLoad] = useState(true);
   const [record, setRecord] = useState({});
   const [wcUri, setWcUri] = useState("");
-  const [temp, setTemp] = useState();
 
   const router = useRouter(); // Initialize router
   const { data: hash, sendTransaction, isPending } = useSendTransaction();
   const { connect, connectors } = useConnect({
     mutation: {
       onSuccess(data) {
-        setTemp(data);
         console.log(record.temporary_address);
         console.log(record.amount_in_wei);
-        sendTransaction({ to: data.accounts[0], value: record.amount_in_wei });
+        sendTransaction(
+          {
+            to: data.accounts[0],
+            value: record.amount_in_wei,
+            chainName: chain.name,
+          },
+          {
+            onSuccess(data, variables) {
+              console.log("Transaction successful:", data);
+              console.log("chain is:", variables.to);
+              console.log("chain is:", variables.chainName);
+
+              // Update the transaction status to "done" in the database via API
+              updateTransactionStatus(
+                record.id,
+                "done",
+                disconnectdata,
+                variables.chainName.toLowerCase()
+              );
+            },
+            onError(error) {
+              console.error("Transaction failed:", error);
+              // Update the transaction status to "failed" in the database via API
+              // updateTransactionStatus(record.id, "failed");
+            },
+          }
+        );
       },
     },
   });
@@ -66,9 +72,13 @@ export default function PaymentPage({ searchParams }) {
         });
       });
       connect({ connector: connectors[0] });
-      // connectors[0].connect();
     }
+    console.log("useEffect");
+    console.log(chain);
+    console.log(isConnected);
+
     if (firstLoad) {
+      console.log("in iffff");
       disconnect();
       setFirstLoad(false);
       setTimeout(walletConnectQrCodeProvider, 2000);
@@ -83,84 +93,84 @@ export default function PaymentPage({ searchParams }) {
       .then((response) => response.json())
       .then((response) => {
         setRecord(response.record);
-
-        console.log(response.record);
         if (Object.keys(response).length === 0) {
           throw new Error("there is not such a transaction");
         }
       })
       .catch((e) => {
+        console.log("eeeeeeee");
         console.error(e);
         router.push("/test");
       });
   }, [isConnected]);
 
   return (
-    <div className={styles["container"]}>
-      <div className={styles["instructions"]}>
-        <h2>Payment Instructions</h2>
-        <p>
-          Please send <strong>{record.amount_in_eth} ETH</strong> to the
-          following Ethereum address:
-        </p>
-        <p className={styles["ethereumAddress"]}>{record.temporary_address}</p>
-        <code className={styles["ethereumAddress"]}>
-          {record.temporary_address && (
-            <div className={styles["qrCode"]}>
-              <h3>Scan QR to get ETH Address:</h3>
-              <QRCodeSVG
-                level="Q"
-                marginSize="5"
-                style={{ margin: "20px" }}
-                value={record.temporary_address}
-                size={256}
-              />
-            </div>
-          )}
-        </code>
-        <p>
-          Use the QR code on the right to connect your wallet and complete the
-          payment.
-        </p>
-      </div>
-
-      <button
-        onClick={() => {
-          console.log("asjfnsd");
-          connect(connector1);
-        }}
-      >
-        connect
-      </button>
-      <div className={styles["instructions"]}>
-        <h2>WalletConnect QR Code</h2>
-        <p>Scan the QR code below to connect your wallet:</p>
-        {!wcUri ? (
-          <p>Loading</p>
-        ) : !isConnected ? (
-          <div>
+    <>
+      {record.status === "Pending" ? (
+        <div className={styles["container"]}>
+          <div className={styles["instructions"]}>
+            <h2>Payment Instructions</h2>
+            <p>
+              Please send <strong>{record.amount_in_eth} ETH</strong> to the
+              following Ethereum address:
+            </p>
+            <p className={styles["ethereumAddress"]}>
+              {record.temporary_address}
+            </p>
             <code className={styles["ethereumAddress"]}>
-              <div className={styles["qrCode"]}>
-                <h3>Scan QR to connect:</h3>
-                <QRCodeSVG
-                  level="Q"
-                  marginSize="5"
-                  style={{ margin: "20px" }}
-                  value={wcUri}
-                  size={256}
-                />
-              </div>
+              {record.temporary_address && (
+                <div className={styles["qrCode"]}>
+                  <h3>Scan QR to get ETH Address:</h3>
+                  <QRCodeSVG
+                    level="Q"
+                    marginSize="5"
+                    style={{ margin: "20px" }}
+                    value={record.temporary_address}
+                    size={256}
+                  />
+                </div>
+              )}
             </code>
+            <p>
+              Use the QR code on the right to connect your wallet and complete
+              the payment.
+            </p>
           </div>
-        ) : isPending ? (
-          <p>waiting for transaction to be accepted</p>
-        ) : (
-          <div>
-            <h2>Connected Wallet Address:</h2>
-            <p>{address}</p>
+          <div className={styles["instructions"]}>
+            <h2>WalletConnect QR Code</h2>
+            <p>Scan the QR code below to connect your wallet:</p>
+            {!wcUri ? (
+              <p>Loading</p>
+            ) : !isConnected ? (
+              <div>
+                <code className={styles["ethereumAddress"]}>
+                  <div className={styles["qrCode"]}>
+                    <h3>Scan QR to connect:</h3>
+                    <QRCodeSVG
+                      level="Q"
+                      marginSize="5"
+                      style={{ margin: "20px" }}
+                      value={wcUri}
+                      size={256}
+                    />
+                  </div>
+                </code>
+              </div>
+            ) : isPending ? (
+              <p>waiting for transaction to be accepted</p>
+            ) : (
+              <div>
+                <h2>Connected Wallet Address:</h2>
+                <p>{address}</p>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      ) : record.status === "done" ? (
+        <h1>This Transaction is successfull</h1>
+      ) : (
+        <h1>This transaction failed</h1>
+      )}
+    </>
   );
 }

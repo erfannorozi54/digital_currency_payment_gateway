@@ -4,15 +4,6 @@ import { PriceHolder } from "@/components/priceHolder";
 import { GatewayCreationForm } from "@/components/GatewayCreationForm";
 
 export default function Test() {
-  // async function onSubmit(event) {
-  //   event.preventDefault();
-
-  //   const formData = new FormData(event.target);
-  //   const response = await fetch("/api/submit", {
-  //     method: "POST",
-  //     body: formData,
-  //   });
-  // }
   return (
     <>
       <div dir="rtl" className={styles.container}>
