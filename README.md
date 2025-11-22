@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 💎 درگاه پرداخت ارز دیجیتال
 
-## Getting Started
+یک درگاه پرداخت مدرن و امن برای تراکنش‌های اتریوم با استفاده از Next.js، Web3، و WalletConnect.
 
-First, run the development server:
+## ✨ ویژگی‌ها
 
+- 🔐 **امنیت بالا**: تراکنش‌های رمزنگاری شده و امن
+- ⚡ **سرعت بالا**: پردازش سریع تراکنش‌ها
+- 🌐 **پشتیبانی از WalletConnect**: اتصال آسان به کیف پول‌های مختلف
+- 📱 **طراحی واکنش‌گرا**: سازگار با موبایل، تبلت و دسکتاپ
+- 🎨 **رابط کاربری مدرن**: طراحی زیبا با Glassmorphism
+- 🔄 **نمایش قیمت لحظه‌ای**: بروزرسانی خودکار قیمت اتریوم
+
+## 🚀 شروع کار
+
+### پیش‌نیازها
+
+- Node.js 18.0 یا بالاتر
+- npm یا yarn
+
+### نصب
+
+1. کلون کردن مخزن:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd my-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. نصب وابستگی‌ها:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+3. تنظیم متغیرهای محیطی:
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+سپس فایل `.env` را با مقادیر مورد نیاز خود پر کنید.
 
-## Learn More
+4. اجرای سرور توسعه:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. باز کردن [http://localhost:3000](http://localhost:3000) در مرورگر
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ تکنولوژی‌های استفاده شده
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Framework**: Next.js 14
+- **Styling**: CSS Modules
+- **Web3**: Wagmi, RainbowKit, Ethers.js
+- **Database**: Better-SQLite3
+- **QR Code**: qrcode.react
+- **Fonts**: Vazirmatn (فارسی)
 
-## Deploy on Vercel
+## 📦 ساختار پروژه
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+my-app/
+├── app/                    # صفحات و مسیرها
+│   ├── api/               # API Routes
+│   ├── payment/           # صفحه پرداخت
+│   └── page.js            # صفحه اصلی
+├── components/            # کامپوننت‌های قابل استفاده مجدد
+│   ├── FilterAnimation.js # انیمیشن پس‌زمینه
+│   ├── GatewayCreationForm.js
+│   ├── navbar.js
+│   └── priceHolder.js
+├── actions/               # Server Actions
+├── utils/                 # توابع کمکی
+└── public/               # فایل‌های استاتیک
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 🎨 ویژگی‌های UI/UX
+
+- **Glassmorphic Design**: طراحی مدرن با افکت شیشه‌ای
+- **Gradient Accents**: استفاده از گرادیان‌های زیبا
+- **Smooth Animations**: انیمیشن‌های روان و حرفه‌ای
+- **Loading States**: نمایش وضعیت بارگذاری
+- **Error Handling**: مدیریت خطاها با پیام‌های واضح
+- **Responsive Design**: سازگار با تمام اندازه‌های صفحه
+
+## 🔧 اسکریپت‌ها
+
+- `npm run dev` - اجرای سرور توسعه
+- `npm run build` - ساخت برای محیط تولید
+- `npm start` - اجرای سرور تولید
+- `npm run lint` - بررسی کد با ESLint
+
+## 📝 لایسنس
+
+این پروژه تحت لایسنس MIT منتشر شده است.
+
+## 🤝 مشارکت
+
+مشارکت‌ها، گزارش مشکلات و درخواست‌های ویژگی استقبال می‌شوند!
+
+---
+
+ساخته شده با ❤️ برای جامعه Web3

@@ -10,7 +10,7 @@ export function PriceHolder() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate a network request to fetch the Ethereum price
+    // Fetch the Ethereum price
     const fetchPrice = () => {
       setLoading(true);
       fetch("/api/fetchPrice", {
@@ -24,16 +24,20 @@ export function PriceHolder() {
         })
         .catch((error) => {
           console.error("Error fetching the price:", error);
+          // Set fallback price on error
+          setPrice(286900000); // Fallback price
           setLoading(false);
         });
     };
-    setInterval(fetchPrice, 15000);
+    const interval = setInterval(fetchPrice, 15000);
     fetchPrice();
+    
+    return () => clearInterval(interval); // Cleanup on unmount
   }, []);
   const formattedPrice = price
     ? new Intl.NumberFormat("fa-IR", {
-        style: "currency",
-        currency: "IRR",
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }).format(price)
     : null;
   return (
@@ -44,10 +48,11 @@ export function PriceHolder() {
           <div className={styles["spinner"]}></div>
         </div>
       ) : (
-        <div>
+        <div className={styles["price-display"]}>
           <span className={styles["price-value"]}>
-            {formattedPrice ? IRR2IRT(formattedPrice) : "N/A"}Ξ
+            {formattedPrice ? formattedPrice : "N/A"}
           </span>
+          <span className={styles["price-currency"]}>تومان</span>
         </div>
       )}
     </div>

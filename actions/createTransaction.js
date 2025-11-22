@@ -11,43 +11,69 @@ import { Wallet } from "ethers";
 
 export async function someAction(prevState, formData) {
   let info;
-  await new Promise((res, rej) => {
-    setTimeout(res, 5000); // Simulating async work
-  });
-  const ETH_TO_TOMAN_CONVERSION_RATE = await fetch(
-    "http://localhost:3000/api/fetchPrice",
-    {
-      cache: "no-store",
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      return parseInt(data["data"]) / 10;
-    })
-    .catch((error) => {
-      console.error("Error fetching the price:", error);
-    });
-  const transactionFee = await fetch(
-    "http://localhost:3000/api/fetchGasFee?network=mainnet",
-    {
-      cache: "no-store",
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      return BigInt(data["transactionFeeWei"]);
-    })
-    .catch((error) => {
-      console.error("Error fetching the price:", error);
-    });
+  let ETH_TO_TOMAN_CONVERSION_RATE;
+  try {
+    const priceResponse = await fetch(
+      "http://localhost:3000/api/fetchPrice",
+      {
+        cache: "no-store",
+      }
+    );
+    const priceData = await priceResponse.json();
+    ETH_TO_TOMAN_CONVERSION_RATE = parseInt(priceData["data"]) / 10;
+    console.log("Fetched ETH price:", ETH_TO_TOMAN_CONVERSION_RATE);
+  } catch (error) {
+    console.error("Error fetching the price:", error);
+    // Use fallback price if API fails
+    ETH_TO_TOMAN_CONVERSION_RATE = 28690000; // ~286,900 Toman
+  }
+  let transactionFee;
+  try {
+    const feeResponse = await fetch(
+      "http://localhost:3000/api/fetchGasFee?network=mainnet",
+      {
+        cache: "no-store",
+      }
+    );
+    const feeData = await feeResponse.json();
+    transactionFee = BigInt(feeData["transactionFeeWei"]);
+    console.log("Fetched transaction fee:", transactionFee);
+  } catch (error) {
+    console.error("Error fetching gas fee:", error);
+    // Use fallback gas fee if API fails (approximate mainnet gas fee)
+    transactionFee = BigInt("21000000000000000"); // ~0.021 ETH
+  }
   const { walletAddress: temporaryAddress, privateKey } =
     await generateWallet();
   try {
+    // Get form values
+    const walletAddress = formData.get("walletAddress");
+    const amountValue = formData.get("amount");
+    
+    console.log("Received form data - walletAddress:", walletAddress, "amount:", amountValue);
+    
+    // Validate amount is not empty
+    if (!amountValue || amountValue === "" || amountValue === "0") {
+      return {
+        message: "لطفا مبلغ را وارد کنید",
+      };
+    }
+    
+    const parsedAmount = parseInt(amountValue);
+    
+    // Check if parsing was successful
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      return {
+        message: "مبلغ وارد شده معتبر نیست",
+      };
+    }
+    
     // Parse and validate the form data using Zod
     const validatedData = formSchema.parse({
-      walletAddress: formData.get("walletAddress"),
-      amount: parseInt(formData.get("amount")), // Amount in Toman
+      walletAddress: walletAddress,
+      amount: parsedAmount, // Amount in Toman
     });
+    
     // Calculate the equivalent amount in ETH
     const amountInToman = validatedData.amount; // Amount in Toman from the form
     const amountInWei =
@@ -87,12 +113,17 @@ export async function someAction(prevState, formData) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       // Handle validation errors
-      return { success: false, errors: error.errors };
+      const errorMessage = error.errors.map(e => e.message).join(", ");
+      return { 
+        message: `خطای اعتبارسنجی: ${errorMessage}`,
+      };
     }
 
     // Handle other server-side errors
     console.error("Error inserting record:", error);
-    return { success: false, message: "Internal server error" };
+    return { 
+      message: "خطا در ایجاد تراکنش. لطفا دوباره تلاش کنید",
+    };
   }
 
   const id = info.lastInsertRowid;

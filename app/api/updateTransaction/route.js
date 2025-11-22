@@ -103,7 +103,7 @@ export async function POST(request) {
   // Validate the transaction hash
   const isValid = await validateTransactionHash(
     transactionHash,
-    record.receiver_address,
+    record.temporary_address,
     record.amount_in_wei,
     network
   );
