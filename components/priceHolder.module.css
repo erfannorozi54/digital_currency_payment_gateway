@@ -6,7 +6,7 @@
   padding: 1.25rem 2rem;
   text-align: center;
   margin-bottom: 0;
-  min-height: 95px;
+  min-height: 105px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,12 +21,60 @@
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
 }
 
+.price-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.eth-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 8px;
+  color: #667eea;
+}
+
 .price-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: rgba(var(--foreground-rgb), 1);
   margin: 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(46, 204, 113, 0.15);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 50px;
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background: #2ecc71;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.live-text {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #2ecc71;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
 }
 
 .price-display {

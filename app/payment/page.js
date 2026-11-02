@@ -12,6 +12,31 @@ import { QRCodeSVG } from "qrcode.react";
 
 import { useRouter } from "next/navigation";
 import { updateTransactionStatus } from "@/utils/utils";
+
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button onClick={handleCopy} className={styles.copyButton} title="کپی آدرس">
+      {copied ? (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      ) : (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+        </svg>
+      )}
+      <span>{copied ? "کپی شد" : "کپی"}</span>
+    </button>
+  );
+}
+
 export default function PaymentPage({ searchParams }) {
   const { address, isConnected, chain } = useAccount();
   const { disconnect, connectors: c } = useDisconnect();
@@ -145,6 +170,7 @@ export default function PaymentPage({ searchParams }) {
                 </p>
                 <div className={styles.addressBox}>
                   <code className={styles.address}>{record.temporary_address}</code>
+                  <CopyButton text={record.temporary_address} />
                 </div>
                 {record.temporary_address && (
                   <div className={styles.qrSection}>
@@ -201,6 +227,7 @@ export default function PaymentPage({ searchParams }) {
                     <h3>کیف پول متصل شد</h3>
                     <div className={styles.addressBox}>
                       <code className={styles.connectedAddress}>{address}</code>
+                      <CopyButton text={address} />
                     </div>
                   </div>
                 )}

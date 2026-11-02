@@ -2,6 +2,7 @@ import "./globals.css";
 import { inter, vazirmatn } from "@/fonts.js";
 import "@rainbow-me/rainbowkit/styles.css";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 import { FilterAnimation } from "@/components/FilterAnimation";
 
 export const metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
 
           <Navbar></Navbar>
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

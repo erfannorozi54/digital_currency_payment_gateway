@@ -22,8 +22,8 @@ export function FilterAnimation() {
   useEffect(() => {
     let intervalID;
     const intevalFunction = async () => {
+      if (!blurRef.current) return;
       clearInterval(intervalID);
-      // const { leftPos, topPos } = await getMousePos();
       const { leftPos, topPos } = await Promise.race([
         getMousePos(),
         new Promise((resolve) => {
@@ -31,7 +31,8 @@ export function FilterAnimation() {
         }),
       ]);
 
-      // const filterBlendElement = document.getElementById("mm", "before");
+      if (!blurRef.current) return;
+
       if (leftPos == -1 && topPos == -1) {
         blurRef.current.style.setProperty("--transparent-radius", `${0}vh`);
         intervalID = setInterval(intevalFunction, 40);
@@ -44,6 +45,8 @@ export function FilterAnimation() {
     };
 
     intervalID = setInterval(intevalFunction, 40);
+    
+    return () => clearInterval(intervalID);
   }, []);
   return (
     <>

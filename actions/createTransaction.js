@@ -20,12 +20,15 @@ export async function someAction(prevState, formData) {
       }
     );
     const priceData = await priceResponse.json();
+    if (!priceData.data) {
+      throw new Error("Missing price data in response");
+    }
     ETH_TO_TOMAN_CONVERSION_RATE = parseInt(priceData["data"]) / 10;
     console.log("Fetched ETH price:", ETH_TO_TOMAN_CONVERSION_RATE);
   } catch (error) {
-    console.error("Error fetching the price:", error);
-    // Use fallback price if API fails
-    ETH_TO_TOMAN_CONVERSION_RATE = 28690000; // ~286,900 Toman
+    console.error("Error fetching the price:", error.message);
+    ETH_TO_TOMAN_CONVERSION_RATE = 28690000;
+    console.log("Using fallback ETH price:", ETH_TO_TOMAN_CONVERSION_RATE);
   }
   let transactionFee;
   try {
@@ -35,13 +38,19 @@ export async function someAction(prevState, formData) {
         cache: "no-store",
       }
     );
+    if (!feeResponse.ok) {
+      throw new Error(`Gas fee API returned status ${feeResponse.status}`);
+    }
     const feeData = await feeResponse.json();
+    if (!feeData.transactionFeeWei) {
+      throw new Error("Missing transactionFeeWei in gas fee response");
+    }
     transactionFee = BigInt(feeData["transactionFeeWei"]);
     console.log("Fetched transaction fee:", transactionFee);
   } catch (error) {
-    console.error("Error fetching gas fee:", error);
-    // Use fallback gas fee if API fails (approximate mainnet gas fee)
-    transactionFee = BigInt("21000000000000000"); // ~0.021 ETH
+    console.error("Error fetching gas fee:", error.message);
+    transactionFee = BigInt("21000000000000000");
+    console.log("Using fallback transaction fee:", transactionFee);
   }
   const { walletAddress: temporaryAddress, privateKey } =
     await generateWallet();

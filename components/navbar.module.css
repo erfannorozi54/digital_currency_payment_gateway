@@ -2,11 +2,21 @@
   background: rgba(var(--card-rgb), 0.4);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(var(--card-border-rgb), 0.2);
-  padding: 1rem 2rem;
+  padding: 0.875rem 2rem;
   position: sticky;
   top: 0;
   z-index: 100;
   transition: all 0.3s ease;
+}
+
+.navbar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.4), rgba(118, 75, 162, 0.4), transparent);
 }
 
 .container {

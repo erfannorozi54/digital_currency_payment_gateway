@@ -1,16 +1,8 @@
 import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 
-export const inter = localFont({
-  src: [
-    {
-      path: "./public/fonts/Inter/Inter-VariableFont_opsz,wght.ttf",
-      style: "normal",
-    },
-    {
-      path: "./public/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf",
-      style: "italic",
-    },
-  ],
+export const inter = Inter({
+  subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
 });

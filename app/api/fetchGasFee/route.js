@@ -32,7 +32,6 @@ function getProvider(networkName) {
 
 export async function GET(request) {
   try {
-    // Extract network name from query
     const { searchParams } = new URL(request.url);
     const networkName = searchParams.get("network");
 
@@ -43,32 +42,43 @@ export async function GET(request) {
       );
     }
 
-    // Get provider for the specified network
+    if (!ALCHEMY_API_KEY) {
+      const fallbackGasPriceWei = BigInt("30000000000");
+      const fallbackFeeWei = fallbackGasPriceWei * GAS_LIMIT;
+      return NextResponse.json({
+        network: networkName,
+        gasPriceWei: fallbackGasPriceWei.toString(),
+        gasLimit: GAS_LIMIT.toString(),
+        transactionFeeWei: fallbackFeeWei.toString(),
+        fallback: true,
+      });
+    }
+
     const provider = getProvider(networkName);
 
-    // Fetch the gas price data from the provider
     console.log(await provider.getFeeData());
     const { maxFeePerGas, gasPrice } = await provider.getFeeData();
 
-    // Use "maxFeePerGas" if available, otherwise fallback to "gasPrice"
-    // const effectiveGasPrice = maxFeePerGas || gasPrice;
     const effectiveGasPrice = (gasPrice * 150n) / 100n;
 
-    // Calculate the transaction fee in wei (gas price * gas limit)
     const transactionFeeWei = effectiveGasPrice * GAS_LIMIT;
 
-    // Return the gas price, gas limit, and estimated transaction fee (in wei)
     return NextResponse.json({
       network: networkName,
-      gasPriceWei: effectiveGasPrice.toString(), // Gas price in wei
+      gasPriceWei: effectiveGasPrice.toString(),
       gasLimit: GAS_LIMIT.toString(),
-      transactionFeeWei: transactionFeeWei.toString(), // Estimated transaction fee in wei
+      transactionFeeWei: transactionFeeWei.toString(),
     });
   } catch (error) {
     console.error("Error fetching gas fee:", error);
-    return NextResponse.json(
-      { error: "Error fetching gas fee" },
-      { status: 500 }
-    );
+    const fallbackGasPriceWei = BigInt("30000000000");
+    const fallbackFeeWei = fallbackGasPriceWei * GAS_LIMIT;
+    return NextResponse.json({
+      network: "fallback",
+      gasPriceWei: fallbackGasPriceWei.toString(),
+      gasLimit: GAS_LIMIT.toString(),
+      transactionFeeWei: fallbackFeeWei.toString(),
+      fallback: true,
+    });
   }
 }
